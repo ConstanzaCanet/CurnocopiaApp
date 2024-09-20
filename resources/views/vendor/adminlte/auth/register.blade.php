@@ -35,6 +35,24 @@
             @enderror
         </div>
 
+        {{-- Last name field --}}
+        <div class="input-group mb-3">
+            <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror"
+                   value="{{ old('last_name') }}" placeholder="{{ __('Last name') }}" autofocus>
+
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+
+            @error('name')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+
         {{-- Email field --}}
         <div class="input-group mb-3">
             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"

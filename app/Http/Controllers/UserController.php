@@ -14,6 +14,7 @@ class UserController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'last_name' =>$data['last_name'],
             'password' => Hash::make($data['password']),
             'email_verified_at' => null, // Esto asegura que el usuario deberá verificar su correo.
         ]);

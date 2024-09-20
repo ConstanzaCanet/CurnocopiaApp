@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateShoppingcartTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up()
     {
         Schema::create(config('cart.database.table'), function (Blueprint $table) {
@@ -21,9 +19,7 @@ class CreateShoppingcartTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down()
     {
         Schema::drop(config('cart.database.table'));

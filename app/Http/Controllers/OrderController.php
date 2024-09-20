@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,8 +13,11 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = User::class()->orders()->with('orderItems.product')->get();
-        return view('orders.index', compact('orders'));
+        $cartItems = Cart::content();
+        $totalPrice = Cart::total();
+        $user = auth()->user();  // Obtener el usuario autenticado
+
+        return view('cart.checkout', compact('cartItems', 'totalPrice', 'user'));
     }
 
     public function create()

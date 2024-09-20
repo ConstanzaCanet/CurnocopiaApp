@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
+    public function index()
+    {
+        $cartItems = Cart::content();
+        return view('cart.checkout', compact('cartItems'));
+    }
     public function storeOrder()
     {
         // Crear la orden del usuario autenticado

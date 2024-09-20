@@ -35,12 +35,17 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems'));
     }
 
-    public function update(Request $request, $rowId)
+    public function update($rowId)
     {
-        Cart::update($rowId, $request->quantity); // Actualizar la cantidad de un producto
-        return redirect()->route('cart.index')->with('success', 'Cantidad actualizada.');
-    }
+        $validatedData = request()->validate([
+            'quantity' => 'required|integer|min:1'
+        ]);
 
+        // Actualizar la cantidad del producto en el carrito
+        Cart::update($rowId, $validatedData['quantity']);
+
+        return response()->json(['message' => 'Cantidad actualizada correctamente.']);
+    }
     public function destroy($rowId)
     {
         Cart::remove($rowId); // Eliminar el producto del carrito
