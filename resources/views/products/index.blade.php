@@ -29,9 +29,19 @@
 
                 <!-- Botones de acción -->
                 <div class="flex justify-between items-center p-4 bg-gray-100">
-                    <a href="{{ route('products.edit', $product->id) }}" class="text-white bg-blue-600 hover:bg-blue-700 rounded-md py-2 px-4 text-sm font-medium">
-                        Editar
-                    </a>
+                    
+                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="text-white bg-green-600 hover:bg-green-700 rounded-md py-2 px-4">
+                        Agregar al carrito
+                    </button>
+                </form>
+
+                    <button type="submit" class="rounded-md bg-red-600 py-2 px-4 text-white">
+                        <a href="{{ route('products.edit', $product->id) }}" class="text-white bg-blue-600 hover:bg-blue-700 rounded-md py-2 px-4 text-sm font-medium">
+                            Editar
+                        </a>
+                    </button>
 
                     <!-- Formulario para eliminar producto -->
                     <form id="delete-product-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" onclick="return confirmDelete(event, {{ $product->id }})">
@@ -48,7 +58,9 @@
         <!-- Si no hay productos mostramos un mensaje -->
         <p class="text-gray-600">No hay productos disponibles.</p>
     @endif
+    
 </div>
+
 
 <!-- Estilos personalizados -->
 <style>

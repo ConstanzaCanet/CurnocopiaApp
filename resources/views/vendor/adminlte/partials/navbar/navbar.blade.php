@@ -19,12 +19,12 @@
 
                 <!-- Carrito de Compras -->
         <li class="nav-item dropdown">
-            <a class="nav-link" href="{{ route('dashboard') }}">
+            <a class="nav-link" href="{{ route('cart.index') }}">
                 <!-- SVG del Carrito -->
                 <i class="fas fa-shopping-cart"></i>
                 <!-- Cantidad de productos en el carrito -->
                 <span class="badge badge-pill badge-danger navbar-badge">
-                    {{ '1' }}
+                    {{Cart::count() }}
                 </span>
             </a>
         </li>

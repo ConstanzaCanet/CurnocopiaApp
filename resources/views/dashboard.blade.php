@@ -32,14 +32,7 @@
                     <i class="fas fa-plus"></i> Ingresar un producto
                 </button>
             </a>
-{{--          <a href="{{ route('products.create') }}">
-                <button class="btn btn-primary" type="button">
-                    Ingresar un producto
-                  </button>
-            </a> 
-        </div>--}}
 
-        <!-- Sección de productos -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -59,6 +52,7 @@
                 </div>
             </div>
         </div>
+        {{ $products->links('pagination::bootstrap-4') }}
     </div>
     
     <!-- SweetAlert para confirmar eliminación -->
@@ -80,6 +74,12 @@
                 }
             });
         }
+        //cart
+        Array.from(document.querySelectorAll('.addToCart')).forEach(function(item){
+
+        })
+
+
     </script>
 @stop
 

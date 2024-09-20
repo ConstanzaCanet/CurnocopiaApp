@@ -2,60 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    
+
+    //utilizando Shoppingcart, que permite guardar el carrito tipo cookie---> la modificacion en base de datos se realizara en CheckOutController
     public function index()
     {
-        // Retrieve the current user's cart items
-        // Replace this with your own logic to fetch the cart items
-        $cartItems = [
-            ['id' => 1, 'name' => 'Product 1', 'price' => 100, 'quantity' => 2],
-            ['id' => 2, 'name' => 'Product 2', 'price' => 200, 'quantity' => 1],
-        ];
+        // Obtener el carrito
+        $cartItems = Cart::content();
+        return view('cart.index', compact('cartItems'));
 
-        return view('cart', ['cartItems' => $cartItems]);
     }
-
-    public function addItem(Request $request)
+    
+    public function addToCart(Request $request, $id)
     {
-        // Add the new item to the user's cart
-        // Replace this with your own logic to add the item to the cart
-        $cartItems = session('cartItems', []);
-        $cartItems[] = $request->all();
-        session(['cartItems' => $cartItems]);
+        $product = Product::findOrFail($id);
 
-        return redirect()->route('cart.index');
+        // Añadir al carrito
+        Cart::add($product->id, $product->name, 1, $product->price)
+            ->associate('App\Models\Product');
+
+        return redirect()->route('cart.index')->with('success', 'Producto agregado al carrito!');
     }
 
-    public function updateItem(Request $request, $itemId)
+    public function showCart()
     {
-        // Update the quantity of an item in the user's cart
-        // Replace this with your own logic to update the item quantity
-        $cartItems = session('cartItems', []);
-        foreach ($cartItems as &$item) {
-            if ($item['id'] === $itemId) {
-                $item['quantity'] = $request->get('quantity');
-                break;
-            }
-        }
-        session(['cartItems' => $cartItems]);
-
-        return redirect()->route('cart.index');
+        $cartItems = Cart::content();
+        return view('cart.index', compact('cartItems'));
     }
 
-    public function removeItem($itemId)
-    {
-        // Remove an item from the user's cart
-        // Replace this with your own logic to remove the item from the cart
-        $cartItems = session('cartItems', []);
-        $cartItems = array_filter($cartItems, function ($item) use ($itemId) {
-            return $item['id']!== $itemId;
-        });
-        session(['cartItems' => $cartItems]);
-
-        return redirect()->route('cart.index');
-    }
 }

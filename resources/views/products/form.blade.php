@@ -1,7 +1,7 @@
-<form action="{{ isset($product) ? route('products.update', $product->id) : route('products.store') }}" method="POST">
+<form action="{{ isset($product) ? route('products.update', $product->id) : route('products.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     @if(isset($product))
-        @method('PUT')
+        @method('PATCH')
     @endif
 
     <div class="mb-4">
@@ -38,6 +38,12 @@
         <label for="price" class="block text-gray-700">Stok:</label>
         <input type="number" name="stock_quantity" id="price" value="{{ old('stock_quantity', $product->stock_quantity ?? '') }}" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
         @error('stock_quantity')<br><span style="color: red;">{{"una descripción es requerida"}}</span></br>@enderror
+    </div>
+
+    <div class="mb-4">
+        <label for="images" class="block text-gray-700">Imágenes del Producto:</label>
+        <input type="file" name="images[]" id="images" multiple class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
+        @error('images[]')<br><span style="color: red;">{{"Error al subir las imágenes"}}</span></br>@enderror
     </div>
 
     <!-- Botón de envío -->
