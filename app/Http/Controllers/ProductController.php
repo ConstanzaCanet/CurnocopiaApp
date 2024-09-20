@@ -42,6 +42,8 @@ class ProductController extends Controller
         
         return redirect()->route('dashboard')->with('success', 'Product created! successfull');
     }
+
+    
     //Buscar por id del producto
     public function show($id)
     {

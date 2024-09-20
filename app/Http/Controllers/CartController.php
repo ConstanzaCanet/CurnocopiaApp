@@ -24,9 +24,9 @@ class CartController extends Controller
 
         // Añadir al carrito
         Cart::add($product->id, $product->name, 1, $product->price)
-            ->associate('App\Models\Product');
+            ->associate(Product::class);
 
-        return redirect()->route('cart.index')->with('success', 'Producto agregado al carrito!');
+        return redirect()->route('dashboard')->with('success', 'Producto agregado al carrito!');
     }
 
     public function showCart()
@@ -35,4 +35,15 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems'));
     }
 
+    public function update(Request $request, $rowId)
+    {
+        Cart::update($rowId, $request->quantity); // Actualizar la cantidad de un producto
+        return redirect()->route('cart.index')->with('success', 'Cantidad actualizada.');
+    }
+
+    public function destroy($rowId)
+    {
+        Cart::remove($rowId); // Eliminar el producto del carrito
+        return redirect()->route('cart.index')->with('success', 'Producto eliminado del carrito.');
+    }
 }

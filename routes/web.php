@@ -31,6 +31,8 @@ Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.
 Route::delete('images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');
 
 
+Route::put('/cart/{rowId}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{rowId}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 //Route::delete('products/delete-image/{id}', [ProductController::class, 'deleteImage'])->name('products.deleteImage');
 

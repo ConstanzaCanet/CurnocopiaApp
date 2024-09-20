@@ -1,3 +1,8 @@
+
+@extends('adminlte::page')
+
+@section('content')
+
 <div class="card">
     <img src="{{ $product->imagen }}" alt="{{ $product->name }}" class="card-img-top">
     <div class="card-body">
@@ -7,3 +12,5 @@
         <a href="#" class="btn btn-primary">Ver más</a>
     </div>
 </div>
+
+@stop
