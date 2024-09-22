@@ -26,5 +26,13 @@ class Order extends Model
                     ->withPivot('quantity', 'price_at_purchase');
     }
 
+    //UUID
+    protected static function booted(): void
+    {
+        static::creating(function(Order $order){
+            $order->uuid = str()->uuid();
+        });
+    }
+
 }
 

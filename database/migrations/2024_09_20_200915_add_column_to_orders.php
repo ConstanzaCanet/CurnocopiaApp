@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->string('uuid');
-            $table->string('preference');
+            $table->string('preference')->nullable();
             $table->text('api_response')->nullable();
             $table->integer('zip');
         });

@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderController;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Models\Order;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -38,6 +39,7 @@ Route::put('/cart/{rowId}', [CartController::class, 'update'])->name('cart.updat
 Route::get('/checkout', [OrderController::class, 'index'])->name('cart.checkout');
 Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
 
+Route::get('callback{order:uuid}',[OrderController::class,'callback'])->name('config');
 
 
 

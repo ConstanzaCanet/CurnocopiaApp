@@ -41,4 +41,8 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'mercado_pago'=>[
+        'token' => env('MERCADO_PAGO_TOKEN'),
+        'public_key' => env('MERCADOPAGO_PUBLIC_KEY')
+    ]
 ];
