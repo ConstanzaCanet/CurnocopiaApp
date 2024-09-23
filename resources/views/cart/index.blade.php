@@ -27,7 +27,7 @@
 
                         <!-- Formulario para actualizar la cantidad -->
                         <td>
-                            <input type="number" name="quantity" value="{{ $item->qty }}" min="1" class="form-control" style="width: 70px;" onchange="updateCart('{{ $item->rowId }}', this.value)">
+                             <input type="number" name="quantity" value="{{ $item->qty }}" min="1" class="form-control" style="width: 70px;" onchange="updateCart('{{ $item->rowId }}', this.value)">
                         </td>
 
                         <td>${{ $item->subtotal }}</td>
@@ -66,19 +66,24 @@
 
     <script>
         function updateCart(rowId, quantity) {
-            fetch(`/cart/update/${rowId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ quantity: quantity })
-            }).then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                }
-            });
-        }
+        fetch(`/cart/update/${rowId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ quantity: quantity })
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                // Si el stock es insuficiente
+                response.json().then(data => {
+                    alert(data.message);
+                });
+            }
+        });
+    }
     </script>
 
 @stop

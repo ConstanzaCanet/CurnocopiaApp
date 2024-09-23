@@ -35,17 +35,20 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems'));
     }
 
-    public function update($rowId)
+    public function update(Request $request, $rowId)
     {
-        $validatedData = request()->validate([
-            'quantity' => 'required|integer|min:1'
-        ]);
-
-        // Actualizar la cantidad del producto en el carrito
-        Cart::update($rowId, $validatedData['quantity']);
-
-        return response()->json(['message' => 'Cantidad actualizada correctamente.']);
+        $item = Cart::get($rowId);
+        $product = Product::find($item->id);
+    
+        // Verificamos si hay suficiente stock
+        if ($request->quantity > $product->stock_quantity) {
+            return response()->json(['message' => 'La cantidad solicitada excede el stock disponible.'], 400);
+        }
+        // Si hay, actualizamos
+        Cart::update($rowId, $request->quantity);
+        return response()->json(['message' => 'Carrito actualizado con éxito.']);
     }
+    
     public function destroy($rowId)
     {
         Cart::remove($rowId); // Eliminar el producto del carrito

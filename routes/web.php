@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +43,7 @@ Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.stor
 Route::get('callback{order:uuid}',[OrderController::class,'callback'])->name('config');
 
 
-
+Route::resource('invoices', InvoiceController::class)->only('index');
 
 
 //Route::delete('products/delete-image/{id}', [ProductController::class, 'deleteImage'])->name('products.deleteImage');
