@@ -44,6 +44,7 @@ Route::get('callback{order:uuid}',[OrderController::class,'callback'])->name('co
 
 
 Route::resource('invoices', InvoiceController::class)->only('index');
+Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
 
 
 //Route::delete('products/delete-image/{id}', [ProductController::class, 'deleteImage'])->name('products.deleteImage');

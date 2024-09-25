@@ -28,6 +28,17 @@ class Order extends Model
                     ->withPivot('quantity', 'price_at_purchase');
     }
 
+    public function scopeResponse($query)
+    {
+        return $query->whereNotNull('api_respose');
+    }
+
+    public function getTotal(){
+        return $this->ordelItem->reduce(function ($cart, $item){
+            return $cart + $item->price;
+        }, 0);
+    }
+
     //UUID
     protected static function booted(): void
     {

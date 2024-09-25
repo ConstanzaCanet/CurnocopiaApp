@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "afipsdk/afip.php": "^1.1",
         "anayarojo/shoppingcart": "^4.2",
         "jeroennoten/laravel-adminlte": "^3.13",
         "laravel-lang/common": "*",

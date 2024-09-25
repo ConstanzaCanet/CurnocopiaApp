@@ -57,7 +57,11 @@ class PaymentConfirmed extends Mailable
      */
     public function build()
     {
-        return $this->subject('Confirmación de Pago - Pedido #'.$this->order->id)
-                    ->view('emails.payment_confirmed');
+        return $this->view('emails.payment_confirmed')
+        ->subject('Confirmación de Pago - Tu compra en Cornocopia')
+        ->with([
+            'order' => $this->order,
+        ]);
+
     }
 }

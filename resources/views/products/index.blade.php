@@ -39,8 +39,8 @@
                         </button>
                     </form>
 
-                    <button type="submit" class="rounded-md bg-red-600 py-2 px-4 text-white">
-                        <a href="{{ route('products.edit', $product->id) }}" class="text-white bg-blue-600 hover:bg-blue-700 rounded-md py-2 px-4 text-sm font-medium">
+                    <button type="submit" class="rounded-md bg-red-600 py-2 px-4">
+                        <a href="{{ route('products.edit', $product->id) }}" class="rounded-md py-2 px-4 text-sm font-medium">
                             Editar
                         </a>
                     </button>

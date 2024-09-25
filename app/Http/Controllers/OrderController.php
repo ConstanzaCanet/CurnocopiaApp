@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentConfirmed;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -10,15 +11,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
-use App\Mail\PaymentConfirmed;
-use Illuminate\Support\Facades\Mail;
+
 
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
 
+use App\Services\AfipService;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
+    protected $afipService;
+
+    public function __construct(AfipService $afipService)
+    {
+        $this->afipService = $afipService;
+    }
+
     //detalle de compra en card.checkout
     public function index()
     {
@@ -99,37 +108,59 @@ class OrderController extends Controller
     
     public function callback(Order $order, Request $request)
     {
-        if($order->preference == $request->preference){
-            $order->update(['api_response' => $request->all()]);
-            $paymentStatus = $request->status; // 'approved', 'pending', 'failure', etc.
-            // Obtén el estado del pago desde la respuesta
-
-        // Valida si el pago fue aprobado
-        if ($paymentStatus == 'approved') {
-            // Actualiza el estado del pedido a pagado
-            $order->update(['status' => 'paid']);
-
-            // Elimina el carrito
+        {
+            if($order->preference == $request->preference){
+                $order->update(['api_response' => $request->all()]);
+                Mail::to(Auth::user()->email)->send(new PaymentConfirmed($order));
+            }
             Cart::destroy();
-
-            // Envía el correo de confirmación de pago
-            Mail::to($order->user->email)->send(new PaymentConfirmed($order));
-
             return redirect('dashboard')->with('success','se ha tomado el pago de tu compra');
         }
-        dd($request->all());
-        
-            // Si el pago no fue aprobado, redirigir a una página de estado
-            if ($paymentStatus == 'pending') {
-                return redirect()->route('dashboard')->with('warning', 'Tu pago está pendiente. Te notificaremos una vez se acredite.');
-            }
-    
-            if ($paymentStatus == 'failure') {
-                return redirect()->route('dashboard')->with('error', 'El pago ha fallado. Por favor, intenta nuevamente.');
-            }
-        }
-            // Si la preferencia no coincide, redirige con error
-        return redirect()->route('dashboard')->with('error', 'No se pudo procesar tu pago. Por favor, intenta nuevamente.');
-
     }
+
+
+
+    public function afipInvoice(Request $request, $order)
+    {
+        $lastVoucher = $this->afipService->getLastVoucher(1, 1); // 1 es el tipo de comprobante (Factura A)
+        
+        $invoiceData = [
+            'CantReg' => 1,
+            'PtoVta' => 1, // Punto de venta
+            'CbteTipo' => 1, // Factura A
+            'Concepto' => 1, // Productos
+            'DocTipo' => 80, // CUIT
+            'DocNro' => $request->user()->cuit, // CUIT del cliente
+            'CbteDesde' => $lastVoucher + 1,
+            'CbteHasta' => $lastVoucher + 1,
+            'CbteFch' => date('Ymd'),
+            'ImpTotal' => $order->total_price,
+            'ImpTotConc' => 0,
+            'ImpNeto' => $order->total_price / 1.21, // Importe neto
+            'ImpOpEx' => 0,
+            'ImpIVA' => $order->total_price - ($order->total_price / 1.21), // IVA 21%
+            'ImpTrib' => 0,
+            'MonId' => 'PES',
+            'MonCotiz' => 1,
+            'Iva' => [
+                [
+                    'Id' => 5, // IVA 21%
+                    'BaseImp' => $order->total_price / 1.21,
+                    'Importe' => $order->total_price - ($order->total_price / 1.21),
+                ]
+            ],
+        ];
+
+        $response = $this->afipService->createInvoice($invoiceData);
+
+        // Guardar los datos del CAE y CAE vencimiento en la orden
+        $order->update([
+            'cae' => $response['CAE'],
+            'cae_vto' => $response['CAEFchVto']
+        ]);
+
+        return redirect()->route('invoices.index')->with('success', 'Factura generada con éxito');
+    }
+
+
 }

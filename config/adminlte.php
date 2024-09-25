@@ -306,36 +306,37 @@ return [
         ],
 
         // Sidebar items:
-        [
+        /*[
             'type' => 'sidebar-menu-search',
             'text' => 'search',
-        ],
+        ],*/
         [
             'text' => 'blog',
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
+        
         [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
+            'text' => 'Invoices',
+            'url' => '/invoices',
+            'icon' => 'fas fa-file-invoice-dollar',
             'label' => 4,
             'label_color' => 'success',
         ],
-        ['header' => 'account_settings'],
         [
-            'text' => 'profile',
-            'url' => 'admin/settings',
+            'text' => 'Profile',
+            'url' => '/user/profile',
             'icon' => 'fas fa-fw fa-user',
         ],
-        [
+        /*[
             'text' => 'change_password',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
-        ],
+        ],*/
+        ['header' => 'Products'],
         [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
+            'text' => 'Category',
+            'icon' => 'fas fa-tags',
             'submenu' => [
                 [
                     'text' => 'level_one',
@@ -371,22 +372,22 @@ return [
                 ],
             ],
         ],
-        ['header' => 'labels'],
+        ['header' => 'More'],
         [
-            'text' => 'important',
+            'text' => 'My whishlist',
             'icon_color' => 'red',
             'url' => '#',
         ],
         [
-            'text' => 'warning',
+            'text' => 'Offers',
             'icon_color' => 'yellow',
             'url' => '#',
         ],
-        [
+        /*[
             'text' => 'information',
             'icon_color' => 'cyan',
             'url' => '#',
-        ],
+        ],*/
     ],
 
     /*
