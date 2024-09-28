@@ -9,18 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentConfirmed extends Mailable
+class CreateProductNotification extends Mailable
 {
     use Queueable, SerializesModels;
-    public $order;
-    public $user;
+    public $product;
     /**
      * Create a new message instance.
      */
-    public function __construct($order,$user)
+    public function __construct($product)
     {
-        $this->order = $order;
-        $this->user = $user;
+        $this->product = $product;
     }
 
     /**
@@ -29,7 +27,7 @@ class PaymentConfirmed extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Confirmed',
+            subject: 'Create Product Notification',
         );
     }
 
@@ -39,7 +37,7 @@ class PaymentConfirmed extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.payment_confirmed',
+            view: 'emails.product_notification',
         );
     }
 
@@ -51,19 +49,5 @@ class PaymentConfirmed extends Mailable
     public function attachments(): array
     {
         return [];
-    }
-     /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        return $this->view('emails.payment_confirmed')
-        ->subject('Confirmación de Pago - Tu compra en Cornocopia')
-        ->with([
-            'order' => $this->order,
-        ]);
-
     }
 }

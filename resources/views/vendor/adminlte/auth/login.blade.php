@@ -88,6 +88,7 @@
             <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
         </a>
     </div>
+    
 @stop
 
 @section('auth_footer')

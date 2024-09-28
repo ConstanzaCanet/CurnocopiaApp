@@ -1,6 +1,14 @@
 @extends('adminlte::page')
 @section('title', 'MyProdcuts')
 @section('content')
+<div class="wrapper">
+    <div class="row">
+        @session('success')
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endsession
+    </div>
 
     <div class="p-6 lg:p-8 border-b border-gray-200">
         <h1>{{ request()->routeIs('products.my') ? 'Mis Productos' : 'Productos Disponibles' }}</h1>
@@ -8,7 +16,6 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 lg:p-8">
         @if($products->isNotEmpty())
-            <!-- Si hay productos los mostramos -->
             @foreach ($products as $product)
                 <div class="shadow-md rounded-lg overflow-hidden">
                     <!-- Nombre del producto -->
@@ -57,9 +64,18 @@
                     </div>
                 </div>
             @endforeach
+
         @else
-            <!-- Si no hay productos mostramos un mensaje -->
-            <p class="text-gray-600">No hay productos disponibles.</p>
+            <h2 class="text-gray-600">No hay productos disponibles.</h2>
+            <p>Empieza a vender subiendo tus productos!</p>
+            <div class="mb-4">
+                <a href="{{ route('products.create') }}">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Ingresar un producto
+                    </button>
+                </a>
+            </div>
+    
         @endif
         
     </div>

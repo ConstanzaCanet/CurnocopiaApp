@@ -10,14 +10,9 @@
 
 @section('title', 'Dashboard')
 
+
+
 @section('content')
-    <div class="row">
-        @session('success')
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-        @endsession
-    </div>
 
         <div class="row">
             <div class="col-lg-12">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CreateProductNotification;
 use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -9,6 +10,9 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Mailable;
+
 class ProductController extends Controller
 {
 
@@ -26,27 +30,34 @@ class ProductController extends Controller
     //Crear producto al recibir el request del formulario--->views>products>form
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'price' => 'required|numeric',
-            'stock_quantity' => 'required|integer',
-            'category_id' => 'required|exists:categories,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-        ]);
-
-        $product = Product::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'stock_quantity' => $request->input('stock_quantity'),
-            'category_id' => $request->input('category_id'),
-            'user_id' => auth()->id(),
-        ]);
+        try{
+            $request->validate([
+                'name' => 'required',
+                'price' => 'required|numeric',
+                'stock_quantity' => 'required|integer',
+                'category_id' => 'required|exists:categories,id',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            ]);
     
+            $product = Product::create([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'price' => $request->input('price'),
+                'stock_quantity' => $request->input('stock_quantity'),
+                'category_id' => $request->input('category_id'),
+                'user_id' => auth()->id(),
+            ]);
+            
+            // Manejar las imágenes---> guardo en tabla aparte con la respectiva relacion de product-images
+            $this->imageValidation($request->file('images'), $product);
+            
+        }
+        catch(\Exception $e){
+            Log::error($e->getMessage());
+            return redirect()->route('dashboard')->with('error', 'An error occurred while creating the product.');
+        }
         
-        // Manejar las imágenes---> guardo en tabla aparte con la respectiva relacion de product-images
-        $this->imageValidation($request->file('images'), $product);
-        
+        Mail::to(auth()->user())->send(new CreateProductNotification($product));
         return redirect()->route('dashboard')->with('success', 'Product created! successfull');
     }
 

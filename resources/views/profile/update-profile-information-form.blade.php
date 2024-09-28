@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-
+  
 @section('content')
 <form method="POST" action="{{ route('user-profile-information.update') }}" enctype="multipart/form-data">
     @csrf
