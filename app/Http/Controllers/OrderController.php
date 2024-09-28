@@ -108,19 +108,16 @@ class OrderController extends Controller
     
     public function callback(Order $order, Request $request)
     {
-        {
             if($order->preference == $request->preference){
                 $order->update(['api_response' => $request->all()]);
-                Mail::to(Auth::user()->email)->send(new PaymentConfirmed($order));
             }
             Cart::destroy();
             return redirect('dashboard')->with('success','se ha tomado el pago de tu compra');
-        }
     }
 
 
 
-    public function afipInvoice(Request $request, $order)
+    /*public function afipInvoice(Request $request, $order)
     {
         $lastVoucher = $this->afipService->getLastVoucher(1, 1); // 1 es el tipo de comprobante (Factura A)
         
@@ -159,8 +156,8 @@ class OrderController extends Controller
             'cae_vto' => $response['CAEFchVto']
         ]);
 
-        return redirect()->route('invoices.index')->with('success', 'Factura generada con éxito');
-    }
+        return redirect()->route('invoices.show', $order->id)->with('success', 'Factura generada con éxito.');
+    }*/
 
 
 }

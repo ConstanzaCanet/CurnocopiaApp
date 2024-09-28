@@ -122,6 +122,28 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+    /*
+    |--------------------------------------------------------------------------
+    | Application Cache
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the default cache store that should be used by your
+    | application. This cache store will be used by default by Laravel's
+    | cache and session services. You may change it using the "CACHE_DRIVER"
+    | environment variable.
+    |
+    */
 
+    'aliases'=>[
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
+        'View' => Illuminate\Support\Facades\View::class,
+        'Route' => Illuminate\Support\Facades\Route::class,
+        'Str' => Illuminate\Support\Str::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Log' => Illuminate\Support\Facades\Log::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
+        'Schema' => Illuminate\Support\Facades\Schema::class,
+        'Storage' => Illuminate\Support\Facades\Storage::class,
+    ]
 
 ];

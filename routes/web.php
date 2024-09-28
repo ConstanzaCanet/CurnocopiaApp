@@ -43,10 +43,25 @@ Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.stor
 Route::get('callback{order:uuid}',[OrderController::class,'callback'])->name('config');
 
 
-Route::resource('invoices', InvoiceController::class)->only('index');
-Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+// Rutas para facturación
+Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.index'); // Lista de facturas
+Route::get('invoices/generate/{order}', [InvoiceController::class, 'generate'])->name('invoices.generate');
+Route::get('invoices/{order}', [InvoiceController::class, 'show'])->name('invoices.show'); // Mostrar factura
+
+Route::get('/invoice/{order}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoices.pdf');
 
 
+
+
+Route::middleware(['auth'])->group(function () {
+        // Ruta para los productos del usuario
+        Route::get('/my-products', [ProductController::class, 'myProducts'])->name('products.my');
+        
+        // Rutas para editar y eliminar productos
+        Route::get('/my-products/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/my-products/update/{product}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/my-products/delete/{product}', [ProductController::class, 'destroy'])->name('products.delete');
+    });
 //Route::delete('products/delete-image/{id}', [ProductController::class, 'deleteImage'])->name('products.deleteImage');
 
 /*Route::get('/products', [ProductController::class, 'index'])->name('products.create');

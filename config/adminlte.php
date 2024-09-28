@@ -311,29 +311,28 @@ return [
             'text' => 'search',
         ],*/
         [
-            'text' => 'blog',
-            'url' => 'admin/blog',
+            'text' => 'profile',
+            'url' => '/user/profile', 
             'can' => 'manage-blog',
         ],
         
-        [
-            'text' => 'Invoices',
-            'url' => '/invoices',
-            'icon' => 'fas fa-file-invoice-dollar',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
         [
             'text' => 'Profile',
             'url' => '/user/profile',
             'icon' => 'fas fa-fw fa-user',
         ],
-        /*[
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],*/
+        [
+            'text' => ' Invoices',
+            'url' => '/invoices',
+            'icon' => 'fas fa-file-invoice-dollar',
+            'label_color' => 'success',
+        ],
         ['header' => 'Products'],
+        [
+            'text' => ' My products',
+            'url' => '/my-products',
+            'icon' => 'fas fa-store',
+        ],
         [
             'text' => 'Category',
             'icon' => 'fas fa-tags',
@@ -375,12 +374,14 @@ return [
         ['header' => 'More'],
         [
             'text' => 'My whishlist',
-            'icon_color' => 'red',
+            'icon' => 'fas fa-star',
+            'icon_color' => 'yellow',
             'url' => '#',
         ],
         [
             'text' => 'Offers',
-            'icon_color' => 'yellow',
+            'icon' => 'fas fa-gift',
+            'icon_color' => 'green',
             'url' => '#',
         ],
         /*[

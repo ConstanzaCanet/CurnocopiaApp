@@ -6,14 +6,15 @@ use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 class ProductController extends Controller
 {
-    //
+
     public function index()
     {
-        $products = Product::all(); // Cambia 10 por el número de productos por página
+        $products = Product::all(); 
         return view('products.index', compact('products'));
     }
 
@@ -25,7 +26,6 @@ class ProductController extends Controller
     //Crear producto al recibir el request del formulario--->views>products>form
     public function store(Request $request)
     {
-        // valido datos de request
         $request->validate([
             'name' => 'required',
             'price' => 'required|numeric',
@@ -33,12 +33,19 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
-        // Crear el producto
-        $product = Product::create($request->only('name', 'description', 'price', 'stock_quantity', 'category_id'));
+
+        $product = Product::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'stock_quantity' => $request->input('stock_quantity'),
+            'category_id' => $request->input('category_id'),
+            'user_id' => auth()->id(),
+        ]);
+    
         
         // Manejar las imágenes---> guardo en tabla aparte con la respectiva relacion de product-images
         $this->imageValidation($request->file('images'), $product);
-        dd();
         
         return redirect()->route('dashboard')->with('success', 'Product created! successfull');
     }
@@ -60,6 +67,9 @@ class ProductController extends Controller
         $product = Product::find($id);
         $categories = Category::all();
 
+        if ($product->user_id !== Auth::id()) {
+            abort(403);
+        }
         if (!$product) {
             return redirect()->route('products.index')->with('error', 'Product not found!');
         }
@@ -81,10 +91,7 @@ class ProductController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp',
         ]);
     
-
-        // Actualizar el producto
         $product->update($request->only('name', 'description', 'price', 'stock_quantity', 'category_id'));
-
         $this->imageValidation($request->file('images'), $product);
 
         return redirect()->route('products.show', $product->id)->with('success', 'Product updated successfully!');
@@ -102,8 +109,8 @@ class ProductController extends Controller
     public function deleteImage($imageId)
     {
         $image = Image::findOrFail($imageId);
-        Storage::disk('public')->delete($image->path); // Eliminar la imagen del almacenamiento
-        $image->delete(); // Eliminar el registro de la base de datos
+        Storage::disk('public')->delete($image->path);
+        $image->delete();
 
         return back()->with('success', 'Imagen deleted.');
     }
@@ -130,13 +137,10 @@ class ProductController extends Controller
     {
         try {
             foreach ($images as $image) {
-                // Almacenar la imagen en el directorio 'product_images'
                 $path = $image->store('product_images', 'public');
-                
-                // Depurar el path de la imagen
+                //path de la imagen
                 Log::info('Imagen guardada en: ' . $path);
     
-                // Crear el registro en la tabla 'images'
                 Image::create([
                     'path' => $path,
                     'product_id' => $product->id,
@@ -152,5 +156,11 @@ class ProductController extends Controller
     }
 
 
-
+        // Mostrar los productos del usuario
+        public function myProducts()
+        {
+            $products = Product::where('user_id', auth()->id())->get();
+            return view('products.index', compact('products'));
+        }
+    
 }

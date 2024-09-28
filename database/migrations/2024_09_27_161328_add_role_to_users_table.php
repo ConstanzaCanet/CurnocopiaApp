@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->after('id',function($table){
-                $table->string('facturama_id')->nullable();
-                $table->string('pdf_file')->nullable();
-                $table->string('xml_file')->nullable();
-            });
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role')->default('user');
         });
     }
 
@@ -25,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            //
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
         });
     }
 };

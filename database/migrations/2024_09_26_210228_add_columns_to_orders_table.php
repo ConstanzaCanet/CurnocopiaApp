@@ -6,25 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('uuid')->nullable();
-            $table->string('preference')->nullable();
-            $table->text('api_response')->nullable();
-            $table->integer('zip')->nullable();;
+            $table->string('cae')->nullable();
+            $table->date('cae_vto')->nullable();
         });
     }
 
-
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('uuid');
-            $table->dropColumn('preference');
-            $table->dropColumn('api_response');
-            $table->dropColumn('zip');
+            $table->dropColumn('cae');
+            $table->dropColumn('cae_vto');
         });
     }
 };

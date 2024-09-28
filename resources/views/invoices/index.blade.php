@@ -26,8 +26,11 @@
                     <td>${{ number_format($invoice->total_price, 2) }}</td> 
                     <td>{{ ucfirst($invoice->status) }}</td>
                     <td>
-                        <!-- Botón para ver más detalles de la factura -->
-                        <a href="{{ route('invoices.generate', $invoice->id) }}" class="btn btn-info btn-sm">Facturar</a>
+                    @if ($invoice->status == 'facturado')
+                        <a href="{{ route('invoices.show', $invoice->id) }}" class="btn btn-success">Facturado</a>
+                    @else
+                        <a href="{{ route('invoices.generate', $invoice->id) }}" class="btn btn-primary">Facturar</a>
+                    @endif
                     </td>
                 </tr>
                 @endforeach
