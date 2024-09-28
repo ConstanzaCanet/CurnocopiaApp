@@ -12,12 +12,13 @@
 
         {{-- Custom left links --}}
         @yield('content_top_nav_left')
+        
     </ul>
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
 
-                <!-- Carrito de Compras -->
+        <!-- Carrito de Compras -->
         <li class="nav-item dropdown">
             <a class="nav-link" href="{{ route('cart.index') }}">
                 <!-- SVG del Carrito -->

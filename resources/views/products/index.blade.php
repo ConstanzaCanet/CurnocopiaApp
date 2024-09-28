@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-
+@section('title', 'MyProdcuts')
 @section('content')
 
     <div class="p-6 lg:p-8 border-b border-gray-200">
@@ -78,4 +78,27 @@
 </style>
 
 <script>
+    function confirmDelete(event, productId) {
+        event.preventDefault(); // Evitar el envío del formulario inmediato
+    
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "No podrás revertir esta acción.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, eliminar!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-product').submit();
+            }
+        });
+    }
+    //cart
+    Array.from(document.querySelectorAll('.addToCart')).forEach(function(item){
+
+    })
+
+
 </script>
