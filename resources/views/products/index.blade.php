@@ -21,8 +21,8 @@
                     <!-- Nombre del producto -->
                     <div class="p-4">
                         <h3 class="text-lg font-semibold">{{ $product->name }}</h3>
-                        <p class="text-sm text-gray-600">{{ Str::limit($product->description, 50) }}</p>
-                        <p class="text-lg font-bold text-blue-600 mt-2">Precio: ${{ $product->price }}</p>
+                        <p class="text-sm">{{ Str::limit($product->description, 50) }}</p>
+                        <p class="text-lg font-bold">Precio: ${{ $product->price }}</p>
                     </div>
 
                     <!-- Imagen del producto -->
@@ -40,14 +40,14 @@
                     @if($product->user_id !== auth()->id())
                         <form action="{{ route('cart.add', $product->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="text-white bg-green-600 hover:bg-green-700 rounded-md py-2 px-4">
+                            <button type="submit" class="rounded-md py-2 px-4">
                                 Agregar al carrito
                             </button>
                         </form>
                     @endif
                     @if($product->user_id == auth()->id() && request()->routeIs('products.my'))
-                        <button type="submit" class="rounded-md bg-red-600 py-2 px-4">
-                            <a href="{{ route('products.edit', $product->id) }}" class="rounded-md py-2 px-4 text-sm font-medium">
+                        <button type="submit" class="rounded-md py-2 px-4">
+                            <a href="{{ route('products.edit', $product->id) }}">
                                 Editar
                             </a>
                         </button>
@@ -56,7 +56,7 @@
                         <form id="delete-product-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" onclick="return confirmDelete(event, {{ $product->id }})">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="rounded-md bg-red-600 py-2 px-4 text-white">
+                            <button type="submit" class="rounded-md py-2 px-4">
                                 Eliminar
                             </button>
                         </form>
@@ -107,14 +107,10 @@
             confirmButtonText: "Sí, eliminar!"
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('delete-product').submit();
+                document.getElementById('delete-product-' + productId).submit();
             }
         });
     }
-    //cart
-    Array.from(document.querySelectorAll('.addToCart')).forEach(function(item){
-
-    })
 
 
 </script>

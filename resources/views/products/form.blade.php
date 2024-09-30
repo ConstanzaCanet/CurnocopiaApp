@@ -4,7 +4,7 @@
     <form action="{{ isset($product) ? route('products.update', $product->id) : route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @if(isset($product))
-            @method('PATCH')
+            @method('PUT')
         @endif
 
         <div class="mb-4 mt-4">
