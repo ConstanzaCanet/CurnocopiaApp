@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         View::composer('dashboard', function ($view) {
-            $view->with('products', Product::paginate(10));
+            $view->with('products', Product::paginate(6));
         });
 
     }

@@ -12,10 +12,11 @@
 
 @section('body_data', $layoutHelper->makeBodyData())
 
+
 @section('body')
 
     <div class="wrapper">
-
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
         {{-- Preloader Animation (fullscreen mode) --}}
         @if($preloaderHelper->isPreloaderEnabled())
             @include('adminlte::partials.common.preloader')

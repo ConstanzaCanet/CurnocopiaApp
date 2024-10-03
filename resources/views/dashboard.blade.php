@@ -13,7 +13,7 @@
 
 
 @section('content')
-
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -30,7 +30,6 @@
                 </div>
             </div>
         </div>
-        {{ $products->links('pagination::bootstrap-4') }}
     </div>
     
 
@@ -57,31 +56,6 @@
 
 @section('js')
     <script>
-        $(document).ready(function () {
-            $('.sidebar-toggle').click(function () {
-                $('body').toggleClass('sidebar-collapse');
-            });
-        });
-        // Confirmación para eliminar un producto
-        function confirmDelete(event, productId) {
-            event.preventDefault();
-
-            Swal.fire({
-                title: "¿Estás seguro?",
-                text: "¡No podrás revertir esta acción!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sí, eliminar",
-                cancelButtonText: "Cancelar"
-            }).then((result) => {
-            if (result.isConfirmed) {
-                // Si el usuario confirma, se envía el formulario
-                document.getElementById('delete-product-' + productId).submit();
-            }
-            })
-        }
     
     </script>
 @stop

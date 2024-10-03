@@ -16,13 +16,15 @@ class CartController extends Controller
         $cartItems = Cart::content();
         return view('cart.index', compact('cartItems'));
 
-    }
+    } 
     
     public function addToCart(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
-        // Añadir al carrito
+        if ($product->stock_quantity < 1) {
+            return redirect()->route('dashboard')->with('error', 'Producto sin stock!');
+        }
+        
         Cart::add($product->id, $product->name, 1, $product->price)
             ->associate(Product::class);
 
