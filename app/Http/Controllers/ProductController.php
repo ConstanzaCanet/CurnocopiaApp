@@ -170,7 +170,7 @@ class ProductController extends Controller
         // Mostrar los productos del usuario
         public function myProducts()
         {
-            $products = Product::where('user_id', auth()->id())->get();
+            $products = Product::where('user_id', auth()->id())->paginate(6);
             return view('products.index', compact('products'));
         }
     

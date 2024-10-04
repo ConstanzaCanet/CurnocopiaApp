@@ -24,11 +24,12 @@
                 <!-- SVG del Carrito -->
                 <i class="fas fa-shopping-cart"></i>
                 <!-- Cantidad de productos en el carrito -->
-                <span class="badge badge-pill badge-danger navbar-badge">
-                    {{Cart::count() }}
+                <span class="badge badge-pill badge-danger navbar-badge cart-badge">
+                    {{ Cart::count() }}
                 </span>
             </a>
         </li>
+        
         {{-- Custom right links --}}
        {{--@yield('content_top_nav_right')--}}
 
@@ -52,3 +53,28 @@
     </ul>
 
 </nav>
+
+
+<style>
+
+.cart-badge {
+        font-size: 0.70rem;
+        padding: 0.25em 0.5em;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transform: translate(50%, -50%);
+        border-radius: 50%;
+        min-width: 20px;
+        height: 20px;
+        line-height: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-link {
+        position: relative;
+    }
+
+</style>

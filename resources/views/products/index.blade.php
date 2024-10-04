@@ -28,14 +28,17 @@
                     <!-- Imagen del producto -->
                     <div class="p-4">
                         @if($product->images->isNotEmpty())
-                            @foreach ($product->images as $image)
-                                <img src="{{ $image->path }}" alt="Imagen de {{ $product->name }}">
-                            @endforeach
+                            @if(auth()->user()->id !== $product->user_id)
+                                <a href="{{ route('products.show', $product->id) }}">
+                                    <img src="{{ $product->images->first()->path }}" class="img-fluid product-image" alt="Imagen de {{ $product->name }}">
+                                </a>
+                            @else
+                                <img src="{{ $product->images->first()->path }}" class="img-fluid product-image" alt="Imagen de {{ $product->name }}">
+                            @endif
                         @else
-                            <p class="text-gray-500">No hay imágenes disponibles para este producto.</p>
+                            <p>No hay imágenes disponibles para este producto.</p>
                         @endif
                     </div>
-
                     <!-- Botones de acción -->
                     @if($product->user_id !== auth()->id())
                         <form action="{{ route('cart.add', $product->id) }}" method="POST">
