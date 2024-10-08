@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 use function Livewire\store;
@@ -28,7 +30,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
         Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');
+        Route::get('/categoria/{id}', [ProductController::class, 'productsByCategory'])->name('products.byCategory');
 
+        // Ruta para los productos del usuario
+        Route::get('/my-products', [ProductController::class, 'myProducts'])->name('products.my');
+        Route::get('/my-products/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/my-products/update/{product}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/my-products/delete/{product}', [ProductController::class, 'destroy'])->name('products.delete');
+        
         //Rutas carrito
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
         Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
@@ -46,11 +55,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('invoices/generate/{order}', [InvoiceController::class, 'generate'])->name('invoices.generate');
         Route::get('invoices/{order}', [InvoiceController::class, 'show'])->name('invoices.show');
         Route::get('/invoice/{order}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoices.pdf');
+        
+        // Rutas comentarios
+        Route::post('/comments/{product}', [CommentController::class, 'store'])->name('comments.store');
 
-
-        // Ruta para los productos del usuario
-        Route::get('/my-products', [ProductController::class, 'myProducts'])->name('products.my');
-        Route::get('/my-products/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
-        Route::put('/my-products/update/{product}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/my-products/delete/{product}', [ProductController::class, 'destroy'])->name('products.delete');
-    });
+        //wishlist
+        Route::post('/wishlist/toggle/{product}', [WishlistController::class, 'toggleWishlist'])->name('wishlist.toggle');
+        Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+});

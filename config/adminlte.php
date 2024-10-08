@@ -155,7 +155,7 @@ return [
     'layout_topnav' => null,
     'layout_boxed' => null,
     'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
+    'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
@@ -339,49 +339,17 @@ return [
             'icon' => 'fas fa-plus',
         ],
         [
-            'text' => 'Category',
-            'icon' => 'fas fa-tags',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
+            'key'   => 'categories',
+            'text'  => 'Categories',
+            'icon'  => 'fas fa-tags',
+            'submenu' => [],
         ],
         ['header' => 'More'],
         [
             'text' => 'My whishlist',
             'icon' => 'fas fa-star',
             'icon_color' => 'yellow',
-            'url' => '#',
+            'url' => '/wishlist',
         ],
         [
             'text' => 'Offers',

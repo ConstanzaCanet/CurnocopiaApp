@@ -65,11 +65,18 @@ class ProductController extends Controller
     //Buscar por id del producto
     public function show($id)
     {
-        $product = Product::find($id);
-        if (!$product) {
-            return redirect()->route('products.index')->with('error', 'Product not found!');
+        $product = Product::findOrFail($id);
+        $hasBoughtProduct = false;
+    
+        if (auth()->check()) {
+            $user = auth()->user();
+            $hasBoughtProduct = $user->orders()
+                                    ->whereHas('items', function ($query) use ($product) {
+                                        $query->where('product_id', $product->id);
+                                    })
+                                    ->exists();
         }
-        return view('products.show', compact('product'));
+        return view('products.show', compact('product', 'hasBoughtProduct'));
     }
 
     //redireccionamiento al formulario de edicion con los datos del producto seleccionado
@@ -134,16 +141,31 @@ class ProductController extends Controller
 
         return view('products.index', compact('products'));
     }
+    
     //busqueda por categoria
-    public function filterByCategory($categoryId)
+    public function byCategory($id)
     {
-        $products = Product::where('category_id', $categoryId);
-        $category = Category::find($categoryId);
-
-        return view('products.index', compact('products', 'category'));
+        $category = Category::findOrFail($id);
+        $products = $category->products()->paginate(6);
+        return view('products.index', compact('category', 'products'));
     }
     
-    //Funcion para evitar repeticion
+    // Mostrar los productos del usuario
+    public function myProducts()
+    {
+        $products = Product::where('user_id', auth()->id())->paginate(6);
+        return view('products.index', compact('products'));
+    }
+    
+
+    public function hasBoughtProduct($productId)
+    {
+        return auth()->user()->orders()->whereHas('orderItems', function ($query) use ($productId) {
+            $query->where('product_id', $productId);
+        })->exists();
+    }
+    
+    //Funcion para evitar repeticion de código
     private function imageValidation($images,$product)
     {
         try {
@@ -165,13 +187,4 @@ class ProductController extends Controller
             return redirect()->back()->withErrors('Error al subir las imágenes');
         }
     }
-
-
-        // Mostrar los productos del usuario
-        public function myProducts()
-        {
-            $products = Product::where('user_id', auth()->id())->paginate(6);
-            return view('products.index', compact('products'));
-        }
-    
 }

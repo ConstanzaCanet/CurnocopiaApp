@@ -79,6 +79,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return url('user/profile');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
     //ROLES
     public function isAdmin()
     {

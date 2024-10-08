@@ -1,5 +1,4 @@
 @extends('adminlte::page')
-
 @section('content')
 
 <div class="container">
@@ -34,6 +33,14 @@
             <h3>{{ $product->name }}</h3>
             <p>{{ $product->description }}</p>
             <p>Precio: ${{ $product->price }}</p>
+            @if($product->user_id !== auth()->id())
+                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-success">
+                        Agregar al carrito
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 
@@ -58,6 +65,18 @@
         </div>
     </div>
 
+    @if($hasBoughtProduct)
+    <form action="{{ route('comments.store', $product->id) }}" method="POST">
+        @csrf
+        <textarea name="content" rows="3" class="form-control" placeholder="Deja tu comentario..."></textarea>
+        <input type="hidden" name="product_id" value="{{ $product->id }}">
+        <button type="submit" class="btn btn-primary mt-2">Comentar</button>
+    </form>
+@else
+    <p>Debes haber comprado este producto para dejar un comentario.</p>
+@endif
+
+    
     <a href="{{ route('products.index') }}" class="btn btn-primary">Volver al listado</a>
 </div>
 
