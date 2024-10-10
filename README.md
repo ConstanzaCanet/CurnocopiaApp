@@ -19,10 +19,10 @@ Aqui es necesario revisar tu archivo .env para configurar las variables de entor
 ## Guía de Instalación
 Paso 1: Clonar el Repositorio
 Clona este repositorio en tu máquina local utilizando Git:
-
 git clone https://github.com/ConstanzaCanet/CurnocopiaApp.git
 cd Nombre de la carpeta donde clonaste el repositorio
 ----------------
+
 Paso 2: Instalar Dependencias de PHP y Node.js
 Instala las dependencias de PHP y JavaScript necesarias para ejecutar el proyecto:
 composer install
@@ -48,6 +48,7 @@ DB_PASSWORD=tu_contraseña
 
 # Configuración de MercadoPago
 MERCADOPAGO_ACCESS_TOKEN=tu_token_de_acceso
+MERCADO_PAGO_PUBLIC_KEY=tu_key
 
 # Configuración de Mailtrap para verificación de correos electrónicos
 MAIL_MAILER=smtp
@@ -99,6 +100,8 @@ El proyecto tiene dos roles de usuario:
 User(user): Los usuarios pueden navegar por el catálogo, añadir productos al carrito, realizar compras y ver sus órdenes. Ademas pueden contribuir vendiendo sus propios productos, eliminandolos y editandolos.
 
 Admin(admin): Este rol tiene permisos para crear, editar y eliminar productos en general(suyos y de otros usuarios), además de gestionar órdenes, facturación y puede mandar notificacion a usuarios o eliminarlos.
+
+El sistema de roles está manejado directamente con Jetstream y middleware de Laravel. Para limitar el acceso a ciertas rutas según el rol, se usaron políticas y middlewares.
 --------------------
 
 Relaciones entre los Modelos
@@ -140,8 +143,64 @@ Atributos: user_id, product_id.
 Una vez creado los seeders ya puedes interaccionar libremente. Hasta este punto ya estaria explicado como se despliega y como funcionan los modelos que implementamos aqui.
 
 A continuacion se explica brevemente el funcionamiento de un par de paquetes que integramos como servicios en la app.
+
+Lo primero que veremos es que el proyecto utiliza jetstream y adminlte para el registro y el manejo de vistas.
 ----------------------------
 
+Uso de Jetstream y AdminLTE
+En este proyecto se utilizó Jetstream para gestionar la autenticación, manejo de sesiones, y otras funcionalidades avanzadas de usuarios, combinando  la interfaz visual de AdminLTE para una administración.
+
+Jetstream: Manejo de Autenticación y Roles
+Jetstream fue utilizado como la base de autenticación del proyecto, proporcionando características clave como:
+
+Registro de usuarios
+Login/Logout
+Verificación de correo electrónico
+Autenticación de dos factores
+Gestión de equipos (en este proyecto no se utiliza, pero está habilitada)
+La configuración de Jetstream incluye:
+Instalación de Jetstream: Ejecuta el siguiente comando para instalar Jetstream con soporte para Livewire y Blade:
+
+composer require laravel/jetstream
+php artisan jetstream:install livewire
+
+Habilitar Funcionalidades en Jetstream: Algunas características de Jetstream se habilitan en el archivo config/jetstream.php. Por ejemplo, se activó el soporte para fotos de perfil:
+
+Muy importante antes de guardar cualquier imagen:
+
+'features' => [
+    Features::profilePhotos(),---> descomenta
+    Features::emailVerification(),
+],
+
+
+Ejemplo de middleware para proteger rutas de administración:
+
+Route::group(['middleware' => ['auth', 'admin']], function() {
+    Route::resource('products', ProductController::class);
+});
+
+
+AdminLTE: Diseño de la Interfaz de Usuario
+AdminLTE se integró en el proyecto para mejorar la apariencia y usabilidad de la administración y paneles de usuario. AdminLTE proporciona un diseño.
+
+Instalación de AdminLTE: Para integrar AdminLTE en el proyecto, se siguieron los siguientes pasos:
+Descargamos el paquete jeroennoten/laravel-adminlte:
+composer require jeroennoten/laravel-adminlte
+
+Publicamos los archivos de configuración:
+php artisan adminlte:install
+
+Configuramos el archivo config/adminlte.php para personalizar el menú de navegación, los roles que acceden a diferentes opciones y la integración con las vistas de Jetstream.
+
+Integración con Jetstream: Para combinar las vistas de Jetstream con la apariencia de AdminLTE, se realizaron modificaciones en las vistas de autenticación (login, register, etc.). Las plantillas de Jetstream se personalizaron para ajustarse al diseño de AdminLTE, modificando los archivos en resources/views/vendor/adminlte.
+
+Personalización del Menú de Navegación: Para facilitar la navegación, configuramos el menú lateral de AdminLTE con enlaces a las principales secciones, como productos, categorías, y órdenes(y en el caso de admin Panel Admin). También se añadió una opción para el perfil de usuario, facturación y wishlist.
+
+Dark Mode: Se añadió un modo oscuro como opción para mejorar la experiencia visual del usuario. Esta opción está disponible en el menú superior y puede ser activada según las preferencias del usuario.
+
+Personalización de Estilos: Aunque AdminLTE ya viene con un diseño predefinido, se realizaron ajustes para adaptarlo a la identidad del proyecto, integrando Tailwind CSS en algunas partes, como formularios y vistas de productos.
+----------------------------
 Configuración de MercadoPago
 
 Este proyecto usa MercadoPago Checkout Pro para gestionar los pagos. A continuación se describen los pasos para la configuración e integración de MercadoPago.
