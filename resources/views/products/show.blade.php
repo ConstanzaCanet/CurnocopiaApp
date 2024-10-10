@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 pt-4">
             <!-- Carrusel de Imágenes -->
             <div id="productCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
@@ -29,20 +29,25 @@
             
         </div>
 
+        
         <div class="col-md-6">
-            <h3>{{ $product->name }}</h3>
-            <p>{{ $product->description }}</p>
-            <p>Precio: ${{ $product->price }}</p>
-            @if($product->user_id !== auth()->id())
-                <form action="{{ route('cart.add', $product->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-success">
-                        Agregar al carrito
-                    </button>
-                </form>
-            @endif
+            <div class="card border-0 shadow p-4">
+                <h3 class="card-title"><b>{{ $product->name }}</b></h3>
+                <p class="card-text">{{ $product->description }}</p>
+                <h4 class="text-primary">Precio: ${{ $product->price }}</h4>
+                
+                @if($product->user_id !== auth()->id())
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-success btn-lg btn-block mt-3">
+                            <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                        </button>
+                    </form>
+                @endif
+            </div>
         </div>
     </div>
+
 
     <hr>
 
@@ -64,17 +69,24 @@
             @endif
         </div>
     </div>
-
+    <hr class="my-5">
     @if($hasBoughtProduct)
-    <form action="{{ route('comments.store', $product->id) }}" method="POST">
-        @csrf
-        <textarea name="content" rows="3" class="form-control" placeholder="Deja tu comentario..."></textarea>
-        <input type="hidden" name="product_id" value="{{ $product->id }}">
-        <button type="submit" class="btn btn-primary mt-2">Comentar</button>
-    </form>
-@else
-    <p>Debes haber comprado este producto para dejar un comentario.</p>
-@endif
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-0 shadow p-4">
+                <h5>Dejar un comentario</h5>
+                <form action="{{ route('comments.store', $product->id) }}" method="POST">
+                    @csrf
+                    <textarea name="content" rows="3" class="form-control mt-3" placeholder="Deja tu comentario..."></textarea>
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <button type="submit" class="btn btn-primary btn-lg mt-3">Comentar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    @else
+        <p class="text-muted">Debes haber comprado este producto para dejar un comentario.</p>
+    @endif
 
     
     <a href="{{ route('products.index') }}" class="btn btn-primary">Volver al listado</a>

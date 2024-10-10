@@ -2,15 +2,15 @@
 
 @section('title', 'Wishlist')
 @section('content')
-<div class="container">
-    <h1>Mi Lista de Deseos</h1>
-
+<div class="container text-center">
+    <h1 class="pt-4">Mi Lista de Deseos</h1>
+    <hr class="my-4">
     @if ($wishlistItems->isEmpty())
         <p>No tienes productos en tu wishlist.</p>
     @else
-        <div class="col">
+        <div class="row">
             @foreach ($wishlistItems as $item)
-                <div class="row-md-2">
+                <div class="col-6">
                     <div class="card">
                         <img src="{{ $item->product->images->first()->path }}" class="card-img-top" alt="{{ $item->product->name }}">
                         <div class="card-body">

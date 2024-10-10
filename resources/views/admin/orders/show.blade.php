@@ -10,7 +10,7 @@
         @csrf
         <button type="submit" class="btn btn-secondary">Enviar Factura</button>
     </form>    
-    <!-- Incluir el formulario para enviar mensajes (se reutiliza la vista) -->
+    
     @include('admin.users.sendMessage', ['user' => $order->user])
 
     <a href="{{ route('admin.users.show',$user) }}" class="btn btn-secondary">Volver</a>

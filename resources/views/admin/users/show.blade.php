@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h2 class="pt-4">Detalles del usuario: {{ $user->name }}</h2>
+        <div class="container text-center">
+            <h2 class="pt-4">Detalles del usuario: {{ $user->name }}</h2>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -19,36 +21,28 @@
                     </tr>
             </tbody>
         </table>
-    
-        <div>
-            <h3>Enviar mensaje</h3>
-            <form action="{{ route('admin.users.sendMessage', $user) }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="subject">Asunto:</label>
-                    <input type="text" name="subject" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Mensaje:</label>
-                    <textarea name="message" class="form-control" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Enviar mensaje</button>
-            </form>
-        </div>
-        
+
+        <hr class="my-4">
+
+        @include('admin.users.sendMessage', $user)
+
+        <hr class="my-4">
+
         <h3>Productos subidos</h3>
         @if($products->isNotEmpty())
             @foreach ($products as $product)
-                <div class="shadow-md rounded-lg overflow-hidden">
-                    <div class="p-4">
+                <div class="row">
+                    <div class="col-6 p-4 border">
                         <h3 class="text-lg font-semibold">{{ $product->name }}</h3>
                         <p class="text-sm">{{ Str::limit($product->description, 50) }}</p>
                         <p class="text-lg font-bold">Precio: ${{ $product->price }}</p>
                         
-                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                        <form id="delete-product-{{ $product->id }}" action="{{ route('admin.products.destroy', $product->id) }}" method="POST" onclick="return confirmDelete(event, {{ $product->id }})">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar producto</button>
+                            <button type="submit" class="btn btn-danger btn-block">
+                                Eliminar
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -57,11 +51,13 @@
             <h2 class="text-gray-600">No ha publicado productos.</h2>
         @endif
 
+        <hr class="my-4">
+        
     <h3>Compras realizadas</h3>
     @if($orders->isNotEmpty())
         @foreach ($orders as $order)
-            <div class="shadow-md rounded-lg overflow-hidden">
-                <div class="p-4">
+            <div class="row">
+                <div class="col-6 p-4">
                     <h3 class="text-lg font-semibold">Orden #{{ $order->id }}</h3>
                     <p class="text-sm">Total: ${{ $order->total_price }}</p>
                     <p class="text-sm">Fecha: {{ $order->created_at->format('d/m/Y') }}</p>
@@ -72,8 +68,28 @@
             </div>
         @endforeach
     @else
-        <h2 class="text-gray-600">No ha realizado compras.</h2>
+        <h4 class="p-3">No ha realizado compras.</h4>
     @endif
 
     </div>
 @endsection
+
+<script>
+        function confirmDelete(event, productId) {
+        event.preventDefault();
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "No podrás revertir esta acción.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, eliminar!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-product-' + productId).submit();
+            }
+        });
+    }
+
+</script>
