@@ -14,6 +14,6 @@ class ImageController extends Controller
         Storage::delete($image->path);
         $image->delete();
 
-        return back()->with('success', 'Imagen eliminada correctamente.');
+        return back()->with('success', 'Image deleted successfully.');
     }
 }

@@ -11,6 +11,7 @@
 
     {{-- Custom Meta Tags --}}
     @yield('meta_tags')
+    @stack('styles')
 
     {{-- Title --}}
     <title>

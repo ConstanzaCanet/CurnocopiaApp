@@ -297,8 +297,11 @@ return [
         // Navbar items:
         [
             'type' => 'navbar-search',
-            'text' => 'search',
+            'text' => 'Buscar productos',
             'topnav_right' => true,
+            'method' => 'GET', 
+            'input_name' => 'query',
+            'url' => 'search',
         ],
         [
             'type' => 'fullscreen-widget',
@@ -342,7 +345,9 @@ return [
             'key'   => 'categories',
             'text'  => 'Categories',
             'icon'  => 'fas fa-tags',
-            'submenu' => [],
+            'submenu' => [
+                'classes' => 'scrollable-submenu',
+            ],
         ],
         ['header' => 'More'],
         [
@@ -351,17 +356,19 @@ return [
             'icon_color' => 'yellow',
             'url' => '/wishlist',
         ],
-        [
+        /*[
             'text' => 'Offers',
             'icon' => 'fas fa-gift',
             'icon_color' => 'green',
             'url' => '#',
-        ],
-        /*[
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
         ],*/
+        [
+            'text' => 'Admin Panel',
+            'icon' => 'fa fa-edit',
+            'icon_color' => 'cyan',
+            'url' => '/admin/users',
+            'can' => 'admin',
+        ],
     ],
 
     /*

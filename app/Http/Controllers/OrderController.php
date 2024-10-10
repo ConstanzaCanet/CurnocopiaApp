@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\PaymentConfirmed;
+use App\Mail\SendInvoice;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -41,16 +42,12 @@ class OrderController extends Controller
         return view('orders.create');
     }
 
-
-
-
     public function store(Request $request)
     {
         $totalPrice = Cart::content()->reduce(function ($total, $item) {
             return $total + ($item->qty * $item->price);
         }, 0);
 
-        // Crea la orden usando el $request excepto el token y agrega los datos faltantes
         $order = Order::create(
         array_merge($request->except('token'), [
             'user_id' => Auth::id(),
@@ -76,6 +73,7 @@ class OrderController extends Controller
                 'unit_price' => (float) $orderDetail->price_at_purchase,
             ];
         })->values()->toArray();
+        
         //configuro el mercado pago
         MercadoPagoConfig::setAccessToken(config('services.mercado_pago.token'));
         $client = new PreferenceClient;
@@ -93,14 +91,12 @@ class OrderController extends Controller
             ]);
             
             $order->update(['preference' => $preference->id]);
-            //Redireccionar al pago de mercado pago
             return redirect($preference->init_point);
 
         }catch(\Exception $e){
             return redirect()->route('dashboard')->with('message', 'Ups! Algo salio mal!');
         }
     }
-    
     
     public function callback(Order $order, Request $request)
     {
@@ -112,5 +108,18 @@ class OrderController extends Controller
             return redirect('dashboard')->with('success','se ha tomado el pago de tu compra');
     }
 
+    public function show(Order $order)
+    {
+        $user = $order->user;
+        return view('admin.orders.show', compact('order','user'));
+    }
+
+
+    public function sendInvoice(Order $order)
+    {
+        $user = $order->user;
+        Mail::to($user->email)->send(new SendInvoice($order));
+        return redirect()->back()->with('success', 'Factura enviada al usuario.');
+    }
 
 }

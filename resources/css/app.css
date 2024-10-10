@@ -5,3 +5,20 @@
 [x-cloak] {
     display: none;
 }
+.scrollable-submenu {
+    max-height: 300px; 
+    overflow-y: auto; 
+}
+
+.scrollable-submenu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-submenu::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+.scrollable-submenu::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0,0,0,0.4);
+}

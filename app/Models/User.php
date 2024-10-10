@@ -33,10 +33,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -48,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];
-
+    
     /**
      * The accessors to append to the model's array form.
      *
@@ -57,7 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
-
+    
     /**
      * Get the attributes that should be cast.
      *
@@ -69,6 +65,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
     public function adminlte_image()
     {

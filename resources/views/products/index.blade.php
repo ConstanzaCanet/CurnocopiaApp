@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'MyProdcuts')
+
 @section('content')
     <div class="wrapper">
         <div class="row">
@@ -10,8 +10,8 @@
             @endsession
         </div>
 
-        <div class="p-6 lg:p-8 border-b border-gray-200">
-            <h1>{{ request()->routeIs('products.my') ? 'Mis Productos' : 'Productos Disponibles' }}</h1>
+        <div>
+            <h1 class="pt-4">{{ request()->routeIs('products.my') ? 'Mis Productos' : 'Productos Disponibles' }}</h1>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 lg:p-8">
@@ -45,7 +45,7 @@
                         <form action="{{ route('cart.add', $product->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-success">
-                                Agregar al carrito
+                                Add
                             </button>
                         </form>
                         <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
@@ -54,16 +54,16 @@
                                 <i class="fas fa-heart"></i> Add to Wishlist
                             </button>
                         </form>
-                        
                         @endif
+                        
                         @if($product->user_id == auth()->id() && request()->routeIs('products.my'))
                             <button type="submit" class="btn btn-warning">
                                 <a href="{{ route('products.edit', $product->id) }}">
-                                    Editar
+                                    Edit
                                 </a>
                             </button>
 
-                            <!-- Formulario para eliminar producto -->
+                            
                             <form id="delete-product-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" onclick="return confirmDelete(event, {{ $product->id }})">
                                 @csrf
                                 @method('DELETE')

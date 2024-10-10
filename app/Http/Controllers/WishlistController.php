@@ -23,7 +23,6 @@ class WishlistController extends Controller
         if ($wishlistItem) {
             $wishlistItem->delete();
         } else {
-
             $user->wishlists()->create([
                 'product_id' => $productId
             ]);

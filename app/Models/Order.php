@@ -47,6 +47,5 @@ class Order extends Model
             $order->uuid = str()->uuid();
         });
     }
-
 }
 

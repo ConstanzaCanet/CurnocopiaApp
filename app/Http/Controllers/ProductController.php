@@ -136,12 +136,13 @@ class ProductController extends Controller
     //busqueda especifica de producto
     public function search(Request $request)
     {
-        $search = $request->get('search');
-        $products = Product::where('name', 'like', '%'. $search. '%');
-
-        return view('products.index', compact('products'));
+        $searchTerm = $request->input('query');
+        $products = Product::where('name', 'LIKE', "%{$searchTerm}%")
+                            ->orWhere('description', 'LIKE', "%{$searchTerm}%")
+                            ->paginate(6);
+        return view('products.index', compact('products', 'searchTerm'));
     }
-    
+
     //busqueda por categoria
     public function byCategory($id)
     {

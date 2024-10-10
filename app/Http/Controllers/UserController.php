@@ -16,7 +16,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'last_name' =>$data['last_name'],
             'password' => Hash::make($data['password']),
-            'email_verified_at' => null, // Esto asegura que el usuario deberá verificar su correo.
+            'email_verified_at' => null, 
         ]);
     }
 }

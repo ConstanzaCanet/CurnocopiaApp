@@ -30,14 +30,11 @@ class InvoiceController extends Controller
     
     public function show($id)
     {
-        
         $invoice = Invoice::findOrFail($id);
         $order = Order::where('id', $invoice->order_id)->first();
-
         if (!$order) {
             return redirect()->route('invoices.index')->with('error', 'La orden no existe.');
         }
-
         return view('invoices.show', compact('invoice', 'order'));
     }
 
@@ -46,28 +43,22 @@ class InvoiceController extends Controller
     {   
         try
         {
-            // Verifica que la orden existe
         if (!$order) {
             return redirect()->route('invoices.index')->with('error', 'La orden no fue encontrada.');
         }
-        
         $res = $this->afipService->createInvoice($order);
-    
-    
         // Guardar los datos del CAE y CAE vencimiento en la orden
         $order->update([
             'cae' => $res['CAE'],
             'cae_vto' => $res['CAEFchVto'],
-            'status' => 'facturado' // Puedes añadir un campo de estado si lo necesitas
+            'status' => 'facturado'
         ]);
-
         // Crear el registro en la tabla de facturas
-        $invoice = Invoice::create([
+        Invoice::create([
             'order_id' => $order->id,
             'cae' => $res['CAE'],
             'cae_vto' => $res['CAEFchVto'],
         ]);
-
         
         return redirect()->route('invoices.show', $order->id)->with('success', 'Factura generada con éxito.');
 
