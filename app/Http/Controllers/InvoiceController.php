@@ -53,7 +53,6 @@ class InvoiceController extends Controller
             'cae_vto' => $res['CAEFchVto'],
             'status' => 'facturado'
         ]);
-        // Crear el registro en la tabla de facturas
         Invoice::create([
             'order_id' => $order->id,
             'cae' => $res['CAE'],

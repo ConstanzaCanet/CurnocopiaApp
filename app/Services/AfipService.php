@@ -18,17 +18,10 @@ class AfipService
         ]);
     }
 
-    // Obtener el último número de comprobante
     public function getLastVoucher($pointOfSale, $voucherType)
     {
         return $this->afip->ElectronicBilling->GetLastVoucher($pointOfSale, $voucherType);
     }
-
-    // Crear factura
-    /*public function createInvoice($invoiceData)
-    {
-        return $this->afip->ElectronicBilling->CreateVoucher($invoiceData);
-    }*/
 
     public function createInvoice($data)
     {
