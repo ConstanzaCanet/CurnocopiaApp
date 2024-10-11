@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 use function Livewire\store;
@@ -73,7 +74,7 @@ Route::middleware(['auth'])->group(function () {
 Route::group(['middleware' => \App\Http\Middleware\AdminMiddleware::class], function () {
         Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
         Route::get('/admin/users/{user}', [AdminController::class, 'show'])->name('admin.users.show');
-        Route::delete('/admin/user/{user}',[AdminController::class,'destroyUser'])->name('admin.users.destroy');
+        Route::delete('/admin/user/{user}',[UserController::class,'destroy'])->name('admin.users.destroy');
         Route::post('/admin/users/{user}/send-message',[AdminController::class,'sendMessage'])->name('admin.users.sendMessage');
 
 

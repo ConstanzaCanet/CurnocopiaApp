@@ -11,12 +11,13 @@ class UserMessageNotification extends Notification
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    protected $subject;
+    protected $message;
+
+    public function __construct($subject, $message)
     {
-        //
+        $this->subject = $subject;
+        $this->message = $message;
     }
 
     /**
@@ -24,21 +25,6 @@ class UserMessageNotification extends Notification
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
 
     /**
      * Get the array representation of the notification.
@@ -50,5 +36,18 @@ class UserMessageNotification extends Notification
         return [
             //
         ];
+    }
+    public function via($notifiable)
+    {
+        return ['mail'];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+                    ->subject($this->subject)
+                    ->line($this->message)
+                    ->line('Gracias por ser parte de nuestra comunidad.')
+                    ->action('Visitar tienda', url('/'));
     }
 }

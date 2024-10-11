@@ -19,4 +19,11 @@ class UserController extends Controller
             'email_verified_at' => null, 
         ]);
     }
+    
+    public function destroy(User $user)
+    {
+        $user->delete();
+        $user->notify(new UserDeletedNotification());
+        return redirect()->route('home')->with('uccess', 'Usuario eliminado correctamente.');
+    }
 }
