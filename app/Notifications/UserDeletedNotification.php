@@ -43,6 +43,6 @@ class UserDeletedNotification extends Notification
                     ->line('Tu cuenta ha sido eliminada por un administrador.')
                     ->line('Si crees que esto es un error, por favor contáctanos.')
                     ->action('Ir al sitio web', url('/'))
-                    ->line('Gracias por usar nuestra aplicación!');
+                    ->line('Hasta la proxima');
     }
 }

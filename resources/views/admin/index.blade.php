@@ -2,6 +2,13 @@
 @section('title', 'Admin Portal')
 @section('content')
     <div class="container">
+        <div class="row">
+            @session('success')
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endsession
+        </div>
         <h2 class="pt-4">Usuarios</h2>
         <table class="table">
             <thead>

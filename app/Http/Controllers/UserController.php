@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\UserDeletedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,11 +20,11 @@ class UserController extends Controller
             'email_verified_at' => null, 
         ]);
     }
-    
+
     public function destroy(User $user)
     {
         $user->delete();
         $user->notify(new UserDeletedNotification());
-        return redirect()->route('home')->with('uccess', 'Usuario eliminado correctamente.');
+        return redirect()->route('admin.users')->with('success', 'Usuario eliminado correctamente.');
     }
 }
